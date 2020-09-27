@@ -20,7 +20,7 @@ a {
 }
 
 header {
-    background-color: #D33C44;
+    background-color: black;
     color: #ffffff;
     font-size: 30px;
     height: 84px;
@@ -480,15 +480,14 @@ div.message.hidden {
 
 /* Use 'one true layout' methods to get equal height columns */
 .container {
-    overflow: hidden;
     min-height: 92%; /* full height almost always */
 }
 
 /* Force equal height by overflowing */
 .content,
 #actions-sidebar {
-    margin-bottom: -99999px;
-    padding-bottom: 99999px;
+    /*margin-bottom: -99999px;*/
+    /*padding-bottom: 99999px;*/
 }
 @media(max-width: 640px) {
     #actions-sidebar {
@@ -521,4 +520,15 @@ div.message.hidden {
 table td {
     vertical-align: top;
     word-break: break-all;
+}
+
+a {
+    color: $link-color;
+    color: #0f74a8;
+    text-decoration: $link-decoration;
+
+@include hover {
+    color: $link-hover-color;
+    text-decoration: $link-hover-decoration;
+}
 }
