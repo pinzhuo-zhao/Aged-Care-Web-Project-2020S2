@@ -203,8 +203,8 @@ return [
             'host' => 'ssl://smtp.gmail.com',
             'port' => 465,
             'timeout' => 30,
-            'username' => 'languagetub.test@gmail.com',
-            'password' => 'ZPZ19971227zpz',
+            'username' => '',
+            'password' => '',
             'client' => null,
             'tls' => null,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
@@ -255,7 +255,7 @@ return [
              */
             //'port' => 'non_standard_port_number',
             'username' => 'root',
-            'password' => '19971227',
+            'password' => '',
             'database' => 'schema_1',
             /*
              * You do not need to set this flag to use full utf-8 encoding (internal default since CakePHP 3.6).
