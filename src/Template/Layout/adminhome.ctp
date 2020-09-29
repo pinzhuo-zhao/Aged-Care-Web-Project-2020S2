@@ -72,8 +72,8 @@ $cakeDescription = "Beth's Beauty Care";
         </li>
         <li class="nav-item">
             <?php echo $this->Html->link(
-                'Classes',
-                ['controller' => 'users', 'action' => 'classmgmt', '_full' => true],['class' => 'nav-link']
+                'Services Management',
+                ['controller' => 'services', 'action' => 'index', '_full' => true],['class' => 'nav-link']
             );?>
         </li>
         <li class="nav-item">

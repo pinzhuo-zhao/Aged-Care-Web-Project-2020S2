@@ -17,39 +17,55 @@ namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 
-/**
- * Application Controller
- *
- * Add your application-wide methods in the class below, your controllers
- * will inherit them.
- *
- * @link https://book.cakephp.org/3/en/controllers.html#the-app-controller
- */
 class AppController extends Controller
 {
 
-    /**
-     * Initialization hook method.
-     *
-     * Use this method to add common initialization code like loading components.
-     *
-     * e.g. `$this->loadComponent('Security');`
-     *
-     * @return void
-     */
+
     public function initialize()
     {
-        parent::initialize();
 
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,
         ]);
-        $this->loadComponent('Flash');
 
-        /*
-         * Enable the following component for recommended CakePHP security settings.
-         * see https://book.cakephp.org/3/en/controllers/components/security.html
-         */
-        //$this->loadComponent('Security');
+        $this->loadComponent('Flash');
+        $this->loadComponent('Auth', [
+            'authorize'=> 'Controller',
+            'authenticate' => [
+                'Form' => [
+                    'fields' => [
+                        'username' => 'email',
+                        'password' => 'password'
+                    ]
+                ]
+            ],
+            'logoutRedirect' => ['controller' => 'users', 'action' => 'login'],
+            'loginAction' => [
+                'controller' => 'users',
+                'action' => 'login'
+            ],
+            // If unauthorized, return them to page they were just on
+            'unauthorizedRedirect' => $this->referer()
+        ]);
+        $this->Auth->allow(['display', 'password', 'reset', 'logout','register','enquiry','downloadterms']); // Allow everyone access to specific actions
     }
+
+    public function beforeFilter(Event $event)
+    {
+        $this->Auth->allow(['view', 'display']);
+
+
+    }
+
+
+    public function isAuthorized($user)
+    {
+        // Admin can access every action
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+        return false;
+    }
+
+
 }
