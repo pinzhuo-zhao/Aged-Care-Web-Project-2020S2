@@ -92,30 +92,27 @@ $cakeDescription = "Beth's Beauty Care";
                       </div>
                     </div>
               <li class="nav-item">
-                  <?php echo $this->Html->link(
-                      'My Profile',
-                      ['controller' => 'customers', 'action' => 'profile', '_full' => true, $this->request->getSession()->read('Auth.User.id')],['class' => 'nav-link']
-                  );?>
+                  <?= $this->Html->link(
+                      '<i class="fas fa-fw fa-cog"></i> <span>My Profile</span>',
+                      ['controller' => 'customers', 'action' => 'profile', $this->request->getSession()->read('Auth.User.id')],
+                      ['class' => 'nav-link', 'escape' => false]
+                  ) ?>
               </li>
-    <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               <i class="fas fa-fw fa-folder"></i>
-                                            <span>My Appointments</span>
-                                        </a>
-                                        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-
-                                            <?= $this->Html->link(
-                                            'My Current Appointment',
-                                            ['controller' => 'customers', 'action' => 'unit1', '_full' => true]
-                                            );?>
-
-                                    </li>
+    <li class="nav-item">
+            <?= $this->Html->link(
+                '<i class="fas fa-fw fa-folder"></i> <span>My Appointments</span>',
+                ['controller' => 'customers', 'action' => 'allappointments'],
+                ['class' => 'nav-link', 'escape' => false]
+            ) ?>
+    </li>
 
     <li class="nav-item">
-                            <a class="nav-link" href=" ">
-                              <i class="fas fa-fw fa-chart-area"></i>
-                              <span>Make Appointments(Coming soon)</span></a>
-                          </li>
+        <?= $this->Html->link(
+            '<i class="fas fa-fw fa-chart-area"></i> <span>Make Appointments</span>',
+            ['controller' => 'customers', 'action' => 'appointment'],
+            ['class' => 'nav-link', 'escape' => false]
+        ) ?>
+    </li>
 
     <li class="nav-item dropdown">
 

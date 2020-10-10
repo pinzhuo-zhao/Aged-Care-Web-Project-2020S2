@@ -41,18 +41,8 @@ class UsersTable extends Table
         $this->setTable('users');
         $this->setDisplayField('full_name');
         $this->setPrimaryKey('id');
-        $this->belongsTo('class', [
-            'foreignKey' => 'class_id']);
         $this->addBehavior('Timestamp');
-        $this->hasMany('ExerciseAttempts', [
-            'foreignKey' => 'user_id'
-        ]);
-        $this->hasMany('ExerciseNotes', [
-            'foreignKey' => 'user_id'
-        ]);
-        $this->hasMany('User_Units', [
-            'foreignKey' => 'user_id'
-        ]);
+        $this->hasMany('Appointments');
     }
     public function validationDefault(Validator $validator)
     {
@@ -88,17 +78,6 @@ class UsersTable extends Table
             ;
 
 
-        $validator
-            ->scalar('school')
-            ->maxLength('school', 20)
-            ->requirePresence('school', 'create')
-            ->notEmpty('school');
-
-
-        $validator
-            ->integer('year_level')
-            ->requirePresence('year_level', 'create')
-            ->notEmpty('year_level');
 
 
         $validator

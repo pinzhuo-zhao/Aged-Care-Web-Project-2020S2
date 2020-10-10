@@ -21,6 +21,7 @@ class CustomersController extends AppController
         parent::initialize();
         $this->loadModel('Users');
         $this->loadModel('Units');
+        $this->loadModel('Appointments');
         $this->Auth->allow(['view']);
         $this->loadModel('UnitViews');
 
@@ -56,6 +57,58 @@ class CustomersController extends AppController
 //        }
 //        $this->layout='/studenthome';
 //    }
+
+    private function getUser($userID)
+    {
+        $user = $this->Users->find()
+            ->where(['id' => $userID])
+            ->first();
+        return $user;
+    }
+
+    public function allappointments($id = null){
+        $this->layout='/studenthome';
+        $this->paginate = [
+            'contain' => ['Users'],
+        ];
+        $appointments = $this->paginate($this->Appointments);
+
+        $this->set(compact('appointments'));
+    }
+
+    public function delete($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $appointment = $this->Appointments->get($id);
+        if ($this->Appointments->delete($appointment)) {
+            $this->Flash->success(__('The appointment has been deleted.'));
+        } else {
+            $this->Flash->error(__('The appointment could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'allappointments']);
+    }
+
+    public function appointment($id = null){
+
+        $this->layout='/studenthome';
+        $userId = $this->Auth->user('id');
+        $user = $this->getUser($userId);
+        $name = $user['first_name']. '' .$user['surname'];
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $appoint = $this->Appointments->newEntity();
+            $appoint->user_id = $userId;
+            $appoint = $this->Appointments->patchEntity($appoint, $this->request->getData());
+            if ($this->Appointments->save($appoint)) {
+                $this->Flash->success(__('You are now successfully make an appointment'));
+                return $this->redirect(['controller' => 'Customers', 'action' => 'home']);
+            } else {
+                $this->Flash->error(__('There are some errors, please try again.'));
+            }
+        }
+        $this->set('user', $user);
+        $this->set('name', $name);
+    }
 
     public function profile($id = null)
     {
