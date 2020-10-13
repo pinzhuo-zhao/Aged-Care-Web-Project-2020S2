@@ -16,9 +16,7 @@
                 </div>
 
 
-                <div class="text-right p-t-8">
-                    <?= $this->Html->link("Forgot password?", ['action' => 'password']); ?>
-                </div>
+
 
                 <!--<?= $this->Form->control('remember', ['type' => "checkbox", 'label' => "Remember Me", 'hiddenField' => false]); ?>-->
 

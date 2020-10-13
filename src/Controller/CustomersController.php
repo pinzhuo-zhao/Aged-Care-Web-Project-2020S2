@@ -36,7 +36,7 @@ class CustomersController extends AppController
 
     public function home()
     {
-        $this->layout='/studenthome';
+        $this->layout='/customerhome';
     }
 //    public function unit1()
 //    {
@@ -67,11 +67,15 @@ class CustomersController extends AppController
     }
 
     public function allappointments($id = null){
-        $this->layout='/studenthome';
-        $this->paginate = [
-            'contain' => ['Users'],
-        ];
+        $this->layout='/customerhome';
+//        $this->paginate = [
+//            'contain' => ['Users'],
+//        ];
+        $this->loadModel('Appointments');
         $appointments = $this->paginate($this->Appointments);
+        $userId = $this->Auth->user('id');
+        $query = $this->Appointments->find('all', ['conditions' => ['user_id' => $userId]]);
+        $appointments = $query->all();
 
         $this->set(compact('appointments'));
     }
@@ -91,28 +95,34 @@ class CustomersController extends AppController
 
     public function appointment($id = null){
 
-        $this->layout='/studenthome';
+        $this->layout='/customerhome';
         $userId = $this->Auth->user('id');
         $user = $this->getUser($userId);
+        $this->loadModel('Services');
         $name = $user['first_name']. '' .$user['surname'];
+        $query = $this->Services->find('all');
+        $services = $query->all();
+
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $appoint = $this->Appointments->newEntity();
             $appoint->user_id = $userId;
             $appoint = $this->Appointments->patchEntity($appoint, $this->request->getData());
             if ($this->Appointments->save($appoint)) {
-                $this->Flash->success(__('You are now successfully make an appointment'));
-                return $this->redirect(['controller' => 'Customers', 'action' => 'home']);
+                $this->Flash->success(__('You have successfully made your appointment!'));
+                return $this->redirect(['controller' => 'Customers', 'action' => 'allappointments']);
             } else {
-                $this->Flash->error(__('There are some errors, please try again.'));
+                $this->Flash->error(__("Oops, we can't process your request."));
             }
         }
         $this->set('user', $user);
         $this->set('name', $name);
+        $this->set(compact('appointment', 'users', 'services'));
     }
 
     public function profile($id = null)
     {
-        $this->layout='/studenthome';
+        $this->layout='/customerhome';
 
         $this->set('user_session', $this->request->getSession()->read('Auth.User'));
 
@@ -253,7 +263,7 @@ class CustomersController extends AppController
 
 
 //        if($role == 'admin'){
-            $this->viewBuilder()->setLayout('studentnav');
+            $this->viewBuilder()->setLayout('customernav');
 //        }
 
         $name = $session->read('Auth.User.first_name');

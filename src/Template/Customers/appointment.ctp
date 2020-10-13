@@ -42,7 +42,20 @@ $cakeDescription = "Beth's Beauty Care";
                                 ]);
                                 ?>
                                 <?= $this->Form->create();?>
-                                <?= $this->Form->control('beauty_care_service', array('type' => 'select', 'label' => 'Beauty Care Service', 'options' => ['haircut' => 'Hair Cut', 'hairwashdry' => 'Hair Wash & Dry', 'haircolour' => 'Hair Colour'], 'class' => 'form-control'));?>
+                                <div class="wrap-input100 m-b-23">
+                                    <label for="beauty_care_service" class="col-sm-2 -form-label">Type
+                                    </label>
+                                    <select name ="beauty_care_service" class="form-control" required="true">
+                                        <option value>
+                                            <?php foreach ($services as $service) { ?>
+
+                                        <option value="<?php echo $service->service_id?>">
+                                            <?php echo $service->service_type;?>
+                                        </option>
+                                        <?php }?>
+                                    </select>
+                                </div>
+
                                 <label>Appointment Time</label><br>
                                 <?php
                                 echo $this->Form->dateTime('appointment_datetime', [
@@ -58,13 +71,13 @@ $cakeDescription = "Beth's Beauty Care";
                                     'minYear' => 2020
                                 ]);
                                 ?>
+
                                 <?= $this->Form->control('appointment_comment', array('type' => 'textarea', 'label' => 'Comment', 'escape' => false,'rows' => '5', 'cols' => '5'));?>
                                 <?= $this->Form->control('appointment_name', array('label' => 'Name', 'value' => $name));?>
                                 <?= $this->Form->control('appointment_email', array('label' => 'Email', 'value' => $user->email));?>
                                 <?= $this->Form->control('appointment_phone', array('label' => 'Phone Number', 'value' => $user->phone_number));?>
                                 <?= $this->Form->control('appointment_address', array('label' => 'Address', 'value' => $user->hone_address));?>
                                 <?= $this->Form->button('<i class="fa fa-pencil"></i> Submit',['class' => 'login100-form-btn']);?>
-
 
                                 <?= $this->Form->end();?>
 
@@ -75,4 +88,3 @@ $cakeDescription = "Beth's Beauty Care";
             </div>
 
 </body>
-

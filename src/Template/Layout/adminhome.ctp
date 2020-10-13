@@ -84,15 +84,7 @@ $cakeDescription = "Beth's Beauty Care";
         </li>
 
         </li>
-        <li class="nav-item">
-            <?php echo $this->Html->link('Enquiries', ['controller' => 'users', 'action' => 'enquirymgmt', '_full' => true],['class' => 'nav-link'])?>
-        </li>
-        <li class="nav-item">
-            <?php echo $this->Html->link('Sections', ['controller' => 'Sections', 'action' => 'index'],['class' => 'nav-link'])?>
-        </li>
-        <li class="nav-item">
-            <?php echo $this->Html->link('Units', ['controller' => 'Units', 'action' => 'index'],['class' => 'nav-link'])?>
-        </li>
+
 
         </li>
 

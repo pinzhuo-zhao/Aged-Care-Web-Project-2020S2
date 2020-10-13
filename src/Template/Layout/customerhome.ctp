@@ -26,8 +26,8 @@ $cakeDescription = "Beth's Beauty Care";
 
     <!-- Custom styles for this template-->
     <?= $this->Html->css('sb-admin.css') ?>
+    <link type="text/css" rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
 
-    <?= $this->Html->css('jquery.dataTables.min.css') ?>
     <?php $this->layout = false;?>
     <?= $this->Html->css('style-2.css') ?>
     <?= $this->Html->css('util.css') ?>
@@ -201,7 +201,8 @@ $cakeDescription = "Beth's Beauty Care";
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready( function () {
-        $('.myTable').DataTable();
+        $('table').DataTable();
+        $('.select2').select2();
     } );
 </script>
 

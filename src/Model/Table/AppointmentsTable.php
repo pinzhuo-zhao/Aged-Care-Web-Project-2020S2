@@ -40,7 +40,10 @@ class AppointmentsTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
         ]);
+        $this->hasMany('services', [
+            'foreignKey' => 'service_id']);
     }
+
 
     /**
      * Default validation rules.

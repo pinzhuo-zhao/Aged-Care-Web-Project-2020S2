@@ -51,7 +51,8 @@ $cakeDescription = "Beth's Beauty Care";
                 'email'   => ['value' => $user_session['email'], 'required'  => false, 'placeholder' => 'Enter Email', 'label' => ['class'=> 'form-control-label']],
 
                     'phone_number'   => ['value' => $user_session['phone_number'], 'required'  => false, 'placeholder' => 'Enter Phone Number', 'label' => ['class'=> 'form-control-label']],
-                    'biller_info'   => ['value' => $user_session['biller_info'], 'required'  => false, 'placeholder' => 'Enter Biller Info', 'label' => ['class'=> 'form-control-label']],
+                    'name_on_invoice'   => ['value' => $user_session['name_on_invoice'], 'required'  => false, 'placeholder' => 'Enter Name On Invoice', 'label' => ['class'=> 'form-control-label']],
+                    'biller_email_address'   => ['value' => $user_session['biller_email_address'], 'required'  => false, 'placeholder' => 'Enter Biller Email Address', 'label' => ['class'=> 'form-control-label']],
 
 
 
