@@ -102,12 +102,20 @@ class CustomersController extends AppController
         $name = $user['first_name']. '' .$user['surname'];
         $query = $this->Services->find('all');
         $services = $query->all();
+        $queryTime = $this->Appointments->find('all');
+        $datetime = $queryTime->all();
 
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $appoint = $this->Appointments->newEntity();
             $appoint->user_id = $userId;
             $appoint = $this->Appointments->patchEntity($appoint, $this->request->getData());
+            foreach ($datetime as $item){
+                if ($appoint->appointment_datetime == $item->appointment_datetime){
+                    $this->Flash->error(__("Oops, this time has already reserved, please try another time."));
+                    return $this->redirect(['controller' => 'Customers', 'action' => 'appointment']);
+                }
+            }
             if ($this->Appointments->save($appoint)) {
                 $this->Flash->success(__('You have successfully made your appointment!'));
                 return $this->redirect(['controller' => 'Customers', 'action' => 'allappointments']);
@@ -117,7 +125,7 @@ class CustomersController extends AppController
         }
         $this->set('user', $user);
         $this->set('name', $name);
-        $this->set(compact('appointment', 'users', 'services'));
+        $this->set(compact('services'));
     }
 
     public function profile($id = null)
