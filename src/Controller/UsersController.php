@@ -32,6 +32,8 @@ class UsersController extends AppController
     {
         parent::initialize();
         $this->loadComponent('RequestHandler');
+        $this->loadModel('Appointments');
+        $this->loadModel('Users');
     }
 
     public function beforeFilter(Event $event)
@@ -53,17 +55,32 @@ class UsersController extends AppController
         );
     }
 
+    public function adminappointment() {
+        $this->layout='/adminhome';
+        $appointments = $this->paginate($this->Appointments);
+        $query = $this->Appointments->find('all');
+        $appointments = $query->all();
+
+        $this->set(compact('appointments'));
+    }
+
+
 
     public function adminmgmt()
     {
         $this->layout='/adminhome';
+//        $users = $this->paginate($this->Users);
+//
+//        $this->set(compact('users'));
+//        $this->set('users', $this->Users->find(
+//            'all',
+//            array('conditions'=>array('status' => 'active'))
+//        ));
         $users = $this->paginate($this->Users);
+        $query = $this->Users->find('all', ['conditions' => ['role' => 'customer']]);
+        $users = $query->all();
 
         $this->set(compact('users'));
-        $this->set('users', $this->Users->find(
-            'all',
-            array('conditions'=>array('status' => 'active'))
-        ));
     }
     public function enquirymgmt()
     {

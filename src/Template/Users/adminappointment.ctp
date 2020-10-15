@@ -18,12 +18,12 @@
             <th scope="col"><?= $this->Paginator->sort('appointment_datetime') ?></th>
             <th scope="col"><?= $this->Paginator->sort('appointment_comment') ?></th>
             <th scope="col"><?= $this->Paginator->sort('appointment_address') ?></th>
-            <th scope="col" class="actions"><?= __('Actions') ?></th>
         </tr>
         </thead>
         <tbody>
         <?php foreach ($appointments as $appointment): ?>
             <tr>
+
                 <td><?= h($appointment->beauty_care_service) ?></td>
                 <td><?= h($appointment->appointment_name) ?></td>
                 <td><?= h($appointment->appointment_phone) ?></td>
@@ -31,9 +31,6 @@
                 <td><?= h($appointment->appointment_datetime) ?></td>
                 <td><?= h($appointment->appointment_comment) ?></td>
                 <td><?= h($appointment->appointment_address) ?></td>
-                <td class="actions">
-                    <?= $this->element('delete', ['url' => ['action' => 'delete', $appointment->id]]) ?>
-                </td>
             </tr>
         <?php endforeach; ?>
         </tbody>
