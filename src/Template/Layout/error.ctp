@@ -20,7 +20,7 @@
     <title>
         <?= $this->fetch('title') ?>
     </title>
-    <?= $this->Html->meta('icon') ?>
+
 
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('style.css') ?>

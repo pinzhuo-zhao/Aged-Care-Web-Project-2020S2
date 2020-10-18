@@ -200,11 +200,12 @@ return [
             /*
              * The following keys are used in SMTP transports:
              */
-            'host' => 'ssl://smtp.gmail.com',
+            'host' => 'ssl://smtp.qq.com',
             'port' => 465,
             'timeout' => 30,
-            'username' => '',
-            'password' => '',
+            'username' => '2587696796@qq.com',
+            'password' => 'sukphbixrtbnecdd',
+
             'client' => null,
             'tls' => null,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),

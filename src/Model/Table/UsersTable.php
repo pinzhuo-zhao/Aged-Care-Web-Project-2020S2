@@ -13,26 +13,7 @@ use Cake\Validation\Validator;
 
 class UsersTable extends Table
 {
-//    public function checkCharacters($password, array $context)
-//    {
-//         //number
-//        if (!preg_match("#[0-9]#", $password)) {
-//        //    return false;
-//        }
-//        // Uppercase
-//        if (!preg_match("#[A-Z]#", $password)) {
-//            return false;
-//        }
-//        // lowercase
-//        if (!preg_match("#[a-z]#", $password)) {
-//            return false;
-//        }
-//        // special characters
-//        if (!preg_match("#\W+#", $password) ) {
-//            return false;
-//        }
-//        return true;
-//    }
+
 
     public function initialize(array $config)
     {
@@ -41,7 +22,7 @@ class UsersTable extends Table
         $this->setTable('users');
         $this->setDisplayField('full_name');
         $this->setPrimaryKey('id');
-        $this->addBehavior('Timestamp');
+
         $this->hasMany('Appointments');
     }
     public function validationDefault(Validator $validator)
@@ -67,15 +48,11 @@ class UsersTable extends Table
             ->add('confirm_password', 'compareWith', [
                 'rule' => ['compareWith', 'password'],
                 'message' => 'Passwords do not match.'
-            ])
+            ]);
 
-            ->notEmpty('role', 'A role is required')
-            ->add('role', 'inList', [
-                'rule' => ['inList', ['admin','teacher','student','unverified']],
-                'message' => 'Please enter a valid role'
-            ])
 
-            ;
+
+
 
 
 
@@ -92,15 +69,6 @@ class UsersTable extends Table
             ->requirePresence('surname', 'create')
             ->notEmpty('surname');
 
-        $validator
-            ->scalar('passkey')
-            ->maxLength('passkey', 13)
-            ->allowEmpty('passkey');
-
-        $validator
-            ->dateTime('timeout')
-            ->allowEmpty('timeout');
-
 
 
         return $validator;
@@ -113,8 +81,8 @@ class UsersTable extends Table
 
             ->notEmpty('first_name')
             ->notEmpty('surname')
-            ->notEmpty('email', 'An email address is required')
-            ->notEmpty('year_level');
+            ->notEmpty('email', 'An email address is required');
+
         return $validator;
     }
 

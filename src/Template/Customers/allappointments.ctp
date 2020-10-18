@@ -12,6 +12,7 @@
         <thead>
         <tr>
             <th scope="col"><?= $this->Paginator->sort('beauty_care_service') ?></th>
+            <th scope="col"><?= $this->Paginator->sort('beauty_care_service') ?></th>
             <th scope="col"><?= $this->Paginator->sort('appointment_name') ?></th>
             <th scope="col"><?= $this->Paginator->sort('appointment_phone') ?></th>
             <th scope="col"><?= $this->Paginator->sort('appointment_email') ?></th>
@@ -22,9 +23,16 @@
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($appointments as $appointment): ?>
+
+
             <tr>
-                <td><?= h($appointment->beauty_care_service) ?></td>
+                <?php foreach ($appointments as $appointment): ?>
+                <?php foreach ($services as $service): { ?>
+                    <?php if ($appointment->beauty_care_service == $service->service_id){?>
+                        <td><?= h($service->service_type)?></td>
+
+                    <?php } ?>
+                <?php }endforeach; ?>
                 <td><?= h($appointment->appointment_name) ?></td>
                 <td><?= h($appointment->appointment_phone) ?></td>
                 <td><?= h($appointment->appointment_email) ?></td>

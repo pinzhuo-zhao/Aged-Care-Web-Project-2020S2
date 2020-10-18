@@ -31,128 +31,30 @@
                 <li style="text-align: center; line-height: 36px; margin-left:50px;">
                    <li style="text-align: center; line-height: 36px; margin-left:50px;">
 
-                                                                        <div class="dropdown" >
-                                                                          <li class="btn btn- dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                            <a>Hello <?php echo $this->request->getSession()->read('Auth.User.first_name');?></a>
+                     <div class="dropdown" >
+                  <li class="btn btn- dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <a>Hello <?php echo $this->request->getSession()->read('Auth.User.first_name');?></a>
 
-                                                                            </li>
-                                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          </li>
+                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-
-
-                                                                            <div>
-                                                                            <?= $this->Html->link('<i class="fa fa-user icon"></i> Profile',
-                                                                                                 ['controller' => 'users', 'action' => 'profile', $this->request->getSession()->read('Auth.User.id')],
-                                                                                                 ['class' => 'dropdown-item', 'escape' => false]
-
-                                                                                                );?>
-                                                                                                </div>
-
-                                                                           <div>
-                                                                           <?= $this->Html->link(
-                                                                                               '<i class="fa fa-power-off icon"></i> Logout',
-                                                                                               ['controller' => 'users', 'action' => 'logout'],
-                                                                                               ['class' => 'dropdown-item', 'escape' => false]
-                                                                                                );?>
+                <div>
+                   <?= $this->Html->link('<i class="fa fa-power-off icon"></i> Logout',['controller' => 'users', 'action' => 'logout'],
+                        ['class' => 'dropdown-item', 'escape' => false] );?>
 
 
-                                                                                                </div>
+                          </div>
 
 
-                                                                          </div>
-                                                                        </div>
-                                                                        </div>
-                                                                        </li>
-
+                           </div>
+                           </div>
+                           </div>
+                           </li>
 
                 <?php }?>
-                <?php if ($this->request->getSession()->read('Auth.User.role') == 'teacher' ) { ?>
-                <li><?= $this->Html->link(
-                    'Teacher',
-                    ['controller' => 'teacher', 'action' => 'home', '_full' => true]
-                    );?></li>
-                <li><?= $this->Html->link(
-                    'Student',
-                    ['controller' => 'student', 'action' => 'dashboard', '_full' => true]
-                    );?></li>
-
-                <li style="text-align: center; line-height: 36px; margin-left:50px;">
-
-                                                        <div class="dropdown" >
-                                                          <li class="btn btn- dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <a>Bonjour <?php echo $this->request->getSession()->read('Auth.User.first_name');?></a>
-
-                                                            </li>
-                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
 
 
-                                                            <div>
-                                                            <?= $this->Html->link('<i class="fa fa-user icon"></i> Profile',
-                                                                                 ['controller' => 'teacher', 'action' => 'profile', $this->request->getSession()->read('Auth.User.id')],
-                                                                                 ['class' => 'dropdown-item', 'escape' => false]
-
-                                                                                );?>
-                                                                                </div>
-
-                                                           <div>
-                                                           <?= $this->Html->link(
-                                                                               '<i class="fa fa-power-off icon"></i> Logout',
-                                                                               ['controller' => 'users', 'action' => 'logout'],
-                                                                               ['class' => 'dropdown-item', 'escape' => false]
-                                                                                );?>
-
-
-                                                                                </div>
-
-
-                                                          </div>
-                                                        </div>
-                                                        </div>
-                                                        </li>
-
-                <?php }?>
-                <?php if ($this->request->getSession()->read('Auth.User.role') == 'unverified' ) { ?>
-<li><?= $this->Html->link(
-    'Teacher',
-    ['controller' => 'teacher', 'action' => 'home', '_full' => true]
-    );?></li>
-<li><?= $this->Html->link(
-    'Student',
-    ['controller' => 'student', 'action' => 'dashboard', '_full' => true]
-    );?></li>
-
-                <li style="text-align: center; line-height: 36px; margin-left:50px;">
-
-                                                        <div class="dropdown" >
-                                                          <li class="btn btn- dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <a>Bonjour <?php echo $this->request->getSession()->read('Auth.User.first_name');?></a>
-                                                            </li>
-
-                                                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-
-                                                            <div><?= $this->Html->link(
-                                                                                '<i class="fa fa-user icon"></i> Profile',
-                                                                                ['controller' => 'teacher', 'action' => 'profile', $this->request->getSession()->read('Auth.User.id')],
-                                                                                ['class' => 'dropdown-item', 'escape' => false]
-                                                                                );?>
-                                                            </div>
-                                                             <div>
-                                                            <?= $this->Html->link(
-                                                                               '<i class="fa fa-power-off icon"></i> Logout',
-                                                                               ['controller' => 'users', 'action' => 'logout'],
-                                                                               ['class' => 'dropdown-item', 'escape' => false]
-                                                                                );?>
-                                                             </div>
-
-
-
-                                                          </div>
-                                                        </div>
-                                                        </div>
-                                                        </li>
-
-                <?php }?>
                 <?php if ($this->request->getSession()->read('Auth.User.role') == 'customer' ) { ?>
  <li><?= $this->Html->link(
                     'Home',

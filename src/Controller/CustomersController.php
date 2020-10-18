@@ -8,9 +8,8 @@ use Cake\ORM\TableRegistry;
 use Cake\Event\Event;
 use Cake\Routing\Router;
 use Cake\Mailer\Email;
-use PayPal\Api\Payer;
-use PayPal\Api\Item;
-use PayPal\Api\ItemList;
+
+
 
 
 class CustomersController extends AppController
@@ -20,16 +19,15 @@ class CustomersController extends AppController
     {
         parent::initialize();
         $this->loadModel('Users');
-        $this->loadModel('Units');
         $this->loadModel('Appointments');
         $this->Auth->allow(['view']);
-        $this->loadModel('UnitViews');
+
 
     }
 
     public function isAuthorized($user)
     {
-        if (isset($user['role']) && $user['role'] === 'teacher' || $user['role'] === 'admin' || $user['role'] === 'unverified' || $user['role'] === 'customer' && $user['status'] != 'disabled') {
+        if (isset($user['role']) &&  $user['role'] === 'admin'  || $user['role'] === 'customer') {
             return true;
         }
     }
@@ -38,25 +36,7 @@ class CustomersController extends AppController
     {
         $this->layout='/customerhome';
     }
-//    public function unit1()
-//    {
-//        $this->layout='/studenthome';
-//
-//    }
-//    public function unit2()
-//    {
-//        if ($this->request->getSession()->read('Auth.User.subscription') == 'trial'){
-//            $this->redirect($this->referer(['action' => 'home']));
-//        }
-//        $this->layout='/studenthome';
-//    }
-//    public function unit3()
-//    {
-//        if ($this->request->getSession()->read('Auth.User.subscription') == 'trial'){
-//            $this->redirect($this->referer(['action' => 'home']));
-//        }
-//        $this->layout='/studenthome';
-//    }
+
 
     private function getUser($userID)
     {
@@ -72,12 +52,17 @@ class CustomersController extends AppController
 //            'contain' => ['Users'],
 //        ];
         $this->loadModel('Appointments');
+        $this->loadModel('Services');
+        $query = $this->Services->find('all');
+        $services = $query->all();
         $appointments = $this->paginate($this->Appointments);
         $userId = $this->Auth->user('id');
+
         $query = $this->Appointments->find('all', ['conditions' => ['user_id' => $userId]]);
         $appointments = $query->all();
 
         $this->set(compact('appointments'));
+        $this->set(compact('services'));
     }
 
     public function delete($id = null)
@@ -85,13 +70,28 @@ class CustomersController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $appointment = $this->Appointments->get($id);
         if ($this->Appointments->delete($appointment)) {
-            $this->Flash->success(__('The appointment has been deleted.'));
-        } else {
-            $this->Flash->error(__('The appointment could not be deleted. Please, try again.'));
-        }
+            $email1 =  $appointment['appointment_email'];
+            $name = $appointment['appointment_name'];
+            $phone_number = $appointment['appointment_phone'];
+            $time = $appointment['appointment_datetime'];
+            $email = new Email();
+            $email->template('cancel', 'cancel');
+            $email->emailFormat('both');
+            $email->from('beth_beautycare@foxmail.com');
+            $email->to('pinzhuoz@gmail.com');
+            $email->subject('An appointment has been canceled');
+            $email->viewVars(['email1' => $email1, 'name' => $name, 'phone_number' => $phone_number, 'time' => $time]);
+            if ($email->send()) {
+                $this->Flash->success(__('The appointment has been deleted.'));
 
+            } else {
+                $this->Flash->error(__("Oops, we can't process your request: ") . $email->smtpError);
+            }
+        }
         return $this->redirect(['action' => 'allappointments']);
     }
+
+
 
     public function appointment($id = null){
 
@@ -107,25 +107,42 @@ class CustomersController extends AppController
 
 
         if ($this->request->is(['patch', 'post', 'put'])) {
+            $this->loadModel('Appointments');
             $appoint = $this->Appointments->newEntity();
             $appoint->user_id = $userId;
             $appoint = $this->Appointments->patchEntity($appoint, $this->request->getData());
             foreach ($datetime as $item){
                 if ($appoint->appointment_datetime == $item->appointment_datetime){
-                    $this->Flash->error(__("Oops, this time has already reserved, please try another time."));
+                    $this->Flash->error(__("Oops, this timeslot has already been reserved, please try another time."));
                     return $this->redirect(['controller' => 'Customers', 'action' => 'appointment']);
                 }
             }
             if ($this->Appointments->save($appoint)) {
-                $this->Flash->success(__('You have successfully made your appointment!'));
-                return $this->redirect(['controller' => 'Customers', 'action' => 'allappointments']);
-            } else {
-                $this->Flash->error(__("Oops, we can't process your request."));
+                $comment = $appoint['appointment_comment'];
+                $email1 =  $appoint['appointment_email'];
+                $name = $appoint['appointment_name'];
+                $phone_number = $appoint['appointment_phone'];
+                $time = $appoint['appointment_datetime'];
+                $email = new Email();
+                $email->template('appointment', 'appointment');
+                $email->emailFormat('both');
+                $email->from('beth_beautycare@foxmail.com');
+                $email->to('pinzhuoz@gmail.com');
+                $email->subject('New Appointment');
+                $email->viewVars(['email1' => $email1, 'comment' => $comment, 'name' => $name, 'phone_number' => $phone_number, 'time' => $time]);
+                if ($email->send()) {
+                    $this->Flash->success(__('We have received your appointment!'));
+
+                } else {
+                    $this->Flash->error(__("Oops, we can't process your request: ") . $email->smtpError);
+                }
+                $this->redirect(['controller' => 'Customers', 'action' => 'allappointments']);
             }
         }
         $this->set('user', $user);
         $this->set('name', $name);
         $this->set(compact('services'));
+        $this->set(compact('appointments'));
     }
 
     public function profile($id = null)
@@ -153,78 +170,9 @@ class CustomersController extends AppController
         }
         $this->set(compact('user'));
     }
-    public function purchase($id = null)
-    {
-        $this->layout='/studentnav';
-        $this->set('user_session', $this->request->getSession()->read('Auth.User'));
 
-        $user = $this->Users->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['put','post','patch'])) {
-            $user->expiry = date('Y-m-d', strtotime('+1 years'));
-            $user->subscription = Subscription::FULL;
-            $user->unit_token = 10;
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
 
-                $this->Flash->success(__('You have purchased a full subscription'));
-                $this->Auth->setUser($user->toArray());
-                return $this->redirect($this->referer(['action' => 'updateProfile']));
 
-            }else {
-                $this->Flash->error(__('Unable to purchase. Please, try again.'));
-            }
-        }
-        $this->set(compact('user'));
-    }
-    public function purchaseextra($id = null)
-    {
-        $this->layout='/studentnav';
-        $this->set('user_session', $this->request->getSession()->read('Auth.User'));
-
-        $user = $this->Users->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['put','post','patch'])) {
-            $user->unit_token = $user->unit_token+1;
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-
-                $this->Flash->success(__('You have purchased one extra unit'));
-                $this->Auth->setUser($user->toArray());
-                return $this->redirect($this->referer(['action' => 'updateProfile']));
-
-            }else {
-                $this->Flash->error(__('Unable to purchase. Please, try again.'));
-            }
-        }
-        $this->set(compact('user'));
-    }
-
-    public function tenunits($id = null)
-    {
-        $this->layout='/studentnav';
-        $this->set('user_session', $this->request->getSession()->read('Auth.User'));
-
-        $user = $this->Users->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['put','post','patch'])) {
-            $user->unit_token = $user->unit_token+10;
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-
-                $this->Flash->success(__('You have purchased ten extra units'));
-                $this->Auth->setUser($user->toArray());
-                return $this->redirect($this->referer(['action' => 'updateProfile']));
-
-            }else {
-                $this->Flash->error(__('Unable to purchase. Please, try again.'));
-            }
-        }
-        $this->set(compact('user'));
-    }
 
 
     public function configuration() {
@@ -236,83 +184,8 @@ class CustomersController extends AppController
         );
     }
 
-    public function view($slug = null)
-    {
-        $unit = $this->Units->findBySlug($slug)->firstOrFail();
-
-        // Only show published articles to guest users. Alternatively, admin users can see any article regardless
-        // of the published status.
-        if (Role::isStudent($this->Auth->user())) {
-            $view = new UnitView([
-                'unit_id' => $unit->id,
-                'user_id' => $this->Auth->user()['id']
-            ]);
-            $this->UnitViews->save($view);
-            $this->viewBuilder()->setLayout('default');
-            $this->set(compact('unit'));
-        } else {
-            throw new NotFoundException("Unit not found");
-        }
-    }
-
-    public function dashboard()
-    {
 
 
 
-        $this->loadModel('Techniques');
-        $session = $this->getRequest()->getSession();
-        $role = $session->read('Auth.User.role');
-        $user_id = $session->read('Auth.User.id');
-        $user = $this->Users->get($user_id, [
-            'contain' => []
-        ]);
-        $user_tokens = $user['unit_token'];
-
-
-//        if($role == 'admin'){
-            $this->viewBuilder()->setLayout('customernav');
-//        }
-
-        $name = $session->read('Auth.User.first_name');
-        $query = $this->Techniques->find('all');
-        foreach ($query as $rows){
-            if ($rows->id == 1){
-                $tec1 = $rows->technique;
-            }
-            elseif ($rows->id == 2){
-                $tec2 = $rows->technique;
-            }
-            elseif ($rows->id == 3){
-                $tec3 = $rows->technique;
-            }
-        }
-        $this->Auth->setUser($user->toArray());
-
-        $this->loadModel('Units');
-        $units = $this->Units->find('all')
-            ->contain(['Sections', 'Exercises']);
-
-        $this->loadModel('Sections');
-        $sections = $this->Sections->find('all');
-
-
-        //Variables for templates
-        $this->set('role', $role);
-        $this->set('firstName', $name);
-        $this->set('tec1', $tec1);
-        $this->set('tec2', $tec2);
-        $this->set('tec3', $tec3);
-        $this->set('units', $units);
-
-        //The name of the sections
-        $counter = 1;
-        foreach ($sections as $section){
-            $this->set('section'.h($counter), $section->section);
-            $counter++;
-        }
-        $this->set(compact('user'));
-
-    }
 
 }

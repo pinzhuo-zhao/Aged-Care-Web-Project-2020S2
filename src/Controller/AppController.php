@@ -47,7 +47,7 @@ class AppController extends Controller
             // If unauthorized, return them to page they were just on
             'unauthorizedRedirect' => $this->referer()
         ]);
-        $this->Auth->allow(['display', 'password', 'reset', 'logout','register','enquiry','downloadterms']); // Allow everyone access to specific actions
+        $this->Auth->allow(['display', 'logout','register']); // Allow everyone access to specific actions
     }
 
     public function beforeFilter(Event $event)
