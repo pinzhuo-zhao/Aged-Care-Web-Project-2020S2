@@ -12,7 +12,6 @@
         <thead>
         <tr>
             <th scope="col"><?= $this->Paginator->sort('beauty_care_service') ?></th>
-            <th scope="col"><?= $this->Paginator->sort('beauty_care_service') ?></th>
             <th scope="col"><?= $this->Paginator->sort('appointment_name') ?></th>
             <th scope="col"><?= $this->Paginator->sort('appointment_phone') ?></th>
             <th scope="col"><?= $this->Paginator->sort('appointment_email') ?></th>
